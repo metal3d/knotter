@@ -26,10 +26,14 @@ Then, you can implement your first appliction, create a "site.js" file:
 
     var knot = require('knot');
     
+    
+    //handler should serve get, post, put, delete requests
+    //you only have to implement route (as regexp) with right name
     var Page1Handler = new knot.handler({
       route: '/page1',
       get: function (){
         // there you can get: this.sessions, this.response, this.request
+        // and this.aparams (ordered from captured regexp if any)
         // you can write response with this.end("Text to send to client");
         // or render a template: this.render('path to template', context_object)
         
