@@ -44,7 +44,7 @@ var server = knotter.Server({
   statics : ['css', 'js'], // directory names to be served statically
   templatess: './content/templates' // directory where templates can be found
   // you can pass "address" option to set listening address
-  //address : "0.0.0.0" to listen on every interfaces
+  // address : "0.0.0.0" to listen on every interfaces
 });
 
 server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)
