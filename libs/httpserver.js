@@ -99,7 +99,6 @@ Server.prototype.addHandler = function (handler){
  *
  * @params request
  * @params result
- * @todo manage postdata for each request excepting GET
  */
 Server.prototype.handle = function (req, res) {
     for (i in this.handlers) {
