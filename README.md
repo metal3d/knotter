@@ -26,7 +26,7 @@ var knotter = require('knotter');
 
 //handler should serve get, post, put, delete requests
 //you only have to implement route (as regexp) with right name
-var Page1Handler = new knotter.handler({
+var Page1Handler = new knotter.Handler({
   route: '/page1',
   get: function (){
     // there you can get: this.sessions, this.response, this.request
@@ -35,6 +35,14 @@ var Page1Handler = new knotter.handler({
     // or render a template: this.render('path to template', context_object)
     
     this.response.end("Welcome on page 1 !");
+  },
+  
+  post: function() {
+   // handler POST, you can access this.XXX like on GET method
+   // and this.postdata !
+   console.log(this.postdata);
+   this.response.end("post data ok");
+   
   }
 });
 
