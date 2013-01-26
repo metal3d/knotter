@@ -12,7 +12,8 @@ var fs   = require('fs');
 var url  = require('url');
 var _ = require('underscore');
 var sessions = require('sessions');
-var handler = require('./handler.js');
+var handler = require('./handler');
+var qs = require('querystring');
 
 /**
  * Server is HTTP Server
@@ -112,10 +113,28 @@ Server.prototype.handle = function (req, res) {
                 handler.response = res;
                 handler.request = req;
                 handler.params = params;
-                this.sessionHandler.httpRequest(req, res, function (err, session){
-                    handler.sessions = session;
-                    handler[method]();
-                });
+
+                if (method != "get") {
+                    //should try to get post data
+                    var body = "";
+                    var self = this;
+                    req.on('data', function (data){
+                       body += data;
+                    });
+                    req.on('end', function (){
+                        handler.postdata = qs.parse(body);
+                        self.sessionHandler.httpRequest(req, res, function (err, session){
+                            handler.sessions = session;
+                            handler[method]();
+                        });
+                    });
+                } else {
+                    // GET cannot have some postdata, direct response
+                    this.sessionHandler.httpRequest(req, res, function (err, session){
+                        handler.sessions = session;
+                        handler[method]();
+                    });
+                }
                 return;
             }
         }

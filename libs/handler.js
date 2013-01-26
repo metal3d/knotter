@@ -32,6 +32,7 @@ var initSwig = function (options){
  */
 var Handler = function(options){
     this.params = {};
+    this.postdata = null;
     this.route = options['route'];
     this.get = options['get'];
     this.post= options['post'];
