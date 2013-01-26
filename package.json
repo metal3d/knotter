@@ -1,0 +1,15 @@
+{
+    "name": "knotter",
+    "version": "0.0.1",
+    "description": "Knotter is a micro framework to create web application",
+    "main": "indes.js",
+    "keywords": [
+    "frameword",
+    "middleware",
+    "web"
+    ],
+    "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/metal3d/knotter.git"
+    } 
+}
