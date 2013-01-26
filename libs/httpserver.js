@@ -14,7 +14,12 @@ var _ = require('underscore');
 var sessions = require('sessions');
 var handler = require('./handler.js');
 
-
+/**
+ * Server is HTTP Server
+ *
+ * @params options (port, handlers, statics...)
+ * @todo manage https
+ */
 var Server = function (options) {
     this.port = options['port'] || 8000;
     this.handlers = [];
@@ -33,6 +38,11 @@ var Server = function (options) {
     handler.init(options);
 };
 
+/**
+ * Add handler to serve static files
+ *
+ * @params directory
+ */
 Server.prototype._serveStatic = function (dir){
     this.addHandler(new handler.Handler({
         route: '/'+dir+'/.*',
@@ -72,12 +82,24 @@ Server.prototype._serveStatic = function (dir){
     }));
 };
 
-
+/**
+ * Add Handler in server registry
+ *
+ */
 Server.prototype.addHandler = function (handler){
     handler.__reg = new RegExp(handler.route);
     this.handlers.push(handler);
 };
 
+
+/**
+ * Called on each request to get handler mapped to
+ * the called route
+ *
+ * @params request
+ * @params result
+ * @todo manage postdata for each request excepting GET
+ */
 Server.prototype.handle = function (req, res) {
     for (i in this.handlers) {
         var params = null;
@@ -103,6 +125,12 @@ Server.prototype.handle = function (req, res) {
     return;
 };
 
+
+/**
+ * Start to serve http
+ *
+ * @todo set listening address
+ */
 Server.prototype.serve = function () {
     var self = this;
     this.server = http.createServer(function (req, res){
