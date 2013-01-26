@@ -1,7 +1,7 @@
-# knot
+# knotter
 
 
-knot module is a nodejs middleware to create websites.
+knotter module is a nodejs middleware/microframework to create websites.
 
 ## Why not using connect ? express ?
 
@@ -17,23 +17,20 @@ The main goal is to bundle some of my prefered modules in one place:
 At this time, you need to do some operation manually:
   
     cd /path/to/yor/working/directory
-    npm install underscore swig mime sessions
-    cd node_modules
-    git clone git@github.com:metal3d/knot.git
-    cd ..
+    npm install knotter
 
 Then, you can implement your first appliction, create a "site.js" file:
 ```javascript    
 
-var knot = require('knot');
+var knotter = require('knotter');
 
 //handler should serve get, post, put, delete requests
 //you only have to implement route (as regexp) with right name
-var Page1Handler = new knot.handler({
+var Page1Handler = new knotter.handler({
   route: '/page1',
   get: function (){
     // there you can get: this.sessions, this.response, this.request
-    // and this.aparams (ordered from captured regexp if any)
+    // and this.params (ordered from captured regexp if any)
     // you can write response with this.end("Text to send to client");
     // or render a template: this.render('path to template', context_object)
     
@@ -42,7 +39,7 @@ var Page1Handler = new knot.handler({
 });
 
 
-var server = knot.Server({
+var server = knotter.Server({
   handlers : [Page1Handler], //list of handlers,
   statics : ['css', 'js'], // directory names to be served statically
   templatess: './content/templates' // directory where templates can be found
