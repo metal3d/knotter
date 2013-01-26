@@ -23,6 +23,7 @@ var qs = require('querystring');
  */
 var Server = function (options) {
     this.port = options['port'] || 8000;
+    this.address = options['address'] || "127.0.0.1";
     this.handlers = [];
     this.sessionHandler = new sessions();
 
@@ -146,16 +147,14 @@ Server.prototype.handle = function (req, res) {
 
 /**
  * Start to serve http
- *
- * @todo set listening address
  */
 Server.prototype.serve = function () {
     var self = this;
     this.server = http.createServer(function (req, res){
         self.handle(req, res);
     });
-    this.server.listen(this.port, "0.0.0.0");
-    console.log("Server listening on "+this.port);
+    this.server.listen(this.port, this.address);
+    console.log("Server listening on "+this.address+":"+this.port);
 };
 
 
