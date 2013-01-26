@@ -42,7 +42,7 @@ var Page1Handler = new knotter.handler({
 var server = knotter.Server({
   handlers : [Page1Handler], //list of handlers,
   statics : ['css', 'js'], // directory names to be served statically
-  templatess: './content/templates' // directory where templates can be found
+  templates: './content/templates' // directory where templates can be found
   // you can pass "address" option to set listening address
   // address : "0.0.0.0" to listen on every interfaces
 });
