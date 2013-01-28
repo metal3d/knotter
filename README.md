@@ -1,6 +1,5 @@
 # knotter
 
-
 knotter module is a nodejs middleware/microframework to create websites.
 
 ## Why not using connect ? express ?
