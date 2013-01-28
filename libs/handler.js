@@ -28,10 +28,17 @@ var initSwig = function (options){
  * Minimu required is "route" and one of HTTP method
  * as get, post, put, delete...
  *
+ * Handler has this properties to work:
+ *  - params.args => that matches regexp on url
+ *  - params.get => options given by ?argname=argvalue&...
+ *  - postdata => object having post data
+ *  - response => to write response
+ *  - request => the current request
+ *
  * @params options ({route:... , get: funtion(){}... }
  */
 var Handler = function(options){
-    this.params = {};
+    this.params = {args: [], get: {}};
     this.postdata = null;
     this.route = options['route'];
     this.get = options['get'];

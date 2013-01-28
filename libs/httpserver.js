@@ -102,9 +102,10 @@ Server.prototype.addHandler = function (handler){
  * @params result
  */
 Server.prototype.handle = function (req, res) {
+    var query = url.parse(req.url);
     for (i in this.handlers) {
         var params = null;
-        if ((params = req.url.match(this.handlers[i].__reg))) {
+        if ((params = query.pathname.match(this.handlers[i].__reg))) {
             var method = req.method.toLowerCase();
             // to not interact on same request/result while
             // working on simulatneous connections
@@ -112,7 +113,8 @@ Server.prototype.handle = function (req, res) {
             if (handler[method]) {
                 handler.response = res;
                 handler.request = req;
-                handler.params = params;
+                handler.params.args = params || [];
+                handler.params.get  = query.query || {};
 
                 if (method != "get") {
                     //should try to get post data
