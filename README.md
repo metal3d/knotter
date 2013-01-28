@@ -30,7 +30,9 @@ var Page1Handler = new knotter.handler({
   route: '/page1',
   get: function (){
     // there you can get: this.sessions, this.response, this.request
-    // and this.params (ordered from captured regexp if any)
+    // and this.params.args (ordered from captured regexp if any)
+    // and this.params.get (given by ?arg=value&arg2=value2...)
+    // 
     // you can write response with this.end("Text to send to client");
     // or render a template: this.render('path to template', context_object)
     
