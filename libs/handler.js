@@ -44,6 +44,7 @@ var Handler = function(options){
     this.get = options['get'];
     this.post= options['post'];
     this.put= options['put'];
+    this.useSessions = options['useSessions'] || false;
     this['delete']= options['delete'];
     this.__reg = null;
     this.response = null;

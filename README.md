@@ -27,6 +27,7 @@ var knotter = require('knotter');
 //you only have to implement route (as regexp) with right name
 var Page1Handler = new knotter.Handler({
   route: '/page1',
+  useSessions: false, //if true, this.sessions can be used to get values
   get: function (){
     // there you can get: this.sessions, this.response, this.request
     // and this.params.args (ordered from captured regexp if any)

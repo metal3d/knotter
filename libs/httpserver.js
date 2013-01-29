@@ -27,17 +27,20 @@ var Server = function (options) {
     this.handlers = [];
     this.sessionHandler = new sessions();
 
-    if (options['handlers']) {
+    if (options['handlers'] != undefined) {
         for (var i = 0; i < options.handlers.length; i++) {
             this.addHandler(options.handlers[i]);
         }
     }
-    if (options['statics']) {
+    if (options['statics'] != undefined) {
         for (i in options.statics) {
             this._serveStatic(options.statics[i]);
         }
     }
-    handler.init(options);
+    if (options['templates'] != undefined) {
+        //init swig
+        handler.init(options);
+    }
 };
 
 /**
@@ -125,17 +128,27 @@ Server.prototype.handle = function (req, res) {
                     });
                     req.on('end', function (){
                         handler.postdata = qs.parse(body);
+                        if (handler.useSessions) {
+                            self.sessionHandler.httpRequest(req, res, function (err, session){
+                                handler.sessions = session;
+                                handler[method]();
+                            });
+                        }
+                        else {
+                            handler[method]();
+                        }
+                    });
+                } else {
+                    // GET cannot have some postdata, direct response
+                    if (handler.useSessions) {
                         self.sessionHandler.httpRequest(req, res, function (err, session){
                             handler.sessions = session;
                             handler[method]();
                         });
-                    });
-                } else {
-                    // GET cannot have some postdata, direct response
-                    this.sessionHandler.httpRequest(req, res, function (err, session){
-                        handler.sessions = session;
+                    }
+                    else {
                         handler[method]();
-                    });
+                    }
                 }
                 return;
             }
