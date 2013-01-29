@@ -62,7 +62,13 @@ server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to
 
 ## Note on Template Engine
 
-I love swig because it's very close to Jinja, it's fast, simple and very intuitive. If you want to use other template engine, don't set "templates" option on Server. This way, knotter will not initialize swig and you are free to use your prefered template engine as Jade.
+in 0.0.2, knotter could implement swig template engine. But we removed this options to let user using its own prefered template engine. Knotter goals is not to be a "full framework" and should stay "lightwave"
+
+We will prepare a framework based on knotter that will implement some module as:
+- blog
+- cms
+- comments
+
 
 ## Changelog
 
