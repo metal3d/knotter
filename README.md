@@ -52,7 +52,6 @@ var Page1Handler = new knotter.Handler({
 var server = knotter.Server({
   handlers : [Page1Handler], //list of handlers,
   statics : ['css', 'js'], // directory names to be served statically
-  templates: './content/templates' // directory where templates can be found
   // you can pass "address" option to set listening address
   // address : "0.0.0.0" to listen on every interfaces
 });
@@ -65,7 +64,10 @@ server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to
 
 I love swig because it's very close to Jinja, it's fast, simple and very intuitive. If you want to use other template engine, don't set "templates" option on Server. This way, knotter will not initialize swig and you are free to use your prefered template engine as Jade.
 
-I only wanted to import swig to ease integration. If you think that I should'nt let it by default, fill a issue on github to discuss. I'm open to discussion.
+## Changelog
+
+0.0.3
+-  remove swig template engine, to let developper use its prefered engine.
 
 ## About File upload, forms...
 

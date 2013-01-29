@@ -36,18 +36,5 @@ var Handler = function(options){
     this.request = null;
 };
 
-/**
- * Call swig to render response on a template
- *
- * @params template filename
- * @params context to set to template 
- */
-Handler.prototype.render = function (tpl, ctx){
-    var template = swig.compileFile(tpl);
-    this.response.writeHead(200);
-    this.response.end(template.render(ctx));
-};
-
 
 module.exports.Handler = Handler;
-module.exports.init = initSwig;
