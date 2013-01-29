@@ -37,10 +37,6 @@ var Server = function (options) {
             this._serveStatic(options.statics[i]);
         }
     }
-    if (options['templates'] != undefined) {
-        //init swig
-        handler.init(options);
-    }
 };
 
 /**

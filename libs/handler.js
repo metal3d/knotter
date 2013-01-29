@@ -6,21 +6,6 @@
  *
  */
 
-var swig = require('swig');
-
-
-/**
- * Initialize template root
- *
- * @params options (from Server options)
- */
-var initSwig = function (options){
-    if (options['templates']) {
-        swig.init({
-           root: options.templates 
-        });
-    }
-};
 
 /**
  * Handler that will match route to method
