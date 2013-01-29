@@ -59,3 +59,19 @@ var server = knotter.Server({
 
 server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)
 ```
+
+
+## Note on Template Engine
+
+I love swig because it's very close to Jinja, it's fast, simple and very intuitive. If you want to use other template engine, don't set "templates" option on Server. This way, knotter will not initialize swig and you are free to use your prefered template engine as Jade.
+
+I only wanted to import swig to ease integration. If you think that I should'nt let it by default, fill a issue on github to discuss. I'm open to discussion.
+
+## About File upload, forms...
+
+At this time, I didn't found any "nice" way to setup a file uploader. "Nice" means:
+- having a simple interface to save file to a "upload" directory
+- having a method to give upload progress
+- no soucy with rights, mimetype, form encoding...
+
+I guess I will implement "formidable" module to manage forms... One more time, I'm open to discuss about.
