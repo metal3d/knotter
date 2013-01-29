@@ -14,7 +14,7 @@ var h2 = new knot.Handler({
     route : '/page/(.+?)/(\\d+)',
 
     get: function (){
-        var ctx = {params: this.params};
+        var ctx = {params: this.params.args};
         if (!this.sessions.get('count')) {
             this.sessions.set('count', 0);
         }
