@@ -1,7 +1,18 @@
-var knot = require('knot');
+/**
+ * Example of knotter usage
+ *
+ */
 
-var h1 = new knot.Handler({
-    route : '/page1',
+// outside example, use require('knotter')
+var knotter = require('../index');
+
+
+/**
+ * Handler that can respond to /page1
+ *
+ */
+var h1 = new knotter.Handler({
+    route : '^/page1',
 
     get: function(){
        console.log("on page1, ok");
@@ -10,8 +21,14 @@ var h1 = new knot.Handler({
     
 });
 
-var h2 = new knot.Handler({
-    route : '/page/(.+?)/(\\d+)',
+/**
+ * Handler that respond to /page/anything.../number
+ * and can handle sessions
+ *
+ */
+var h2 = new knotter.Handler({
+    route : '^/page/(.+?)/(\\d+)',
+    useSessions: true,
 
     get: function (){
         var ctx = {params: this.params.args};
@@ -20,17 +37,13 @@ var h2 = new knot.Handler({
         }
         this.sessions.set('count', this.sessions.get('count')+1);
         ctx.counter = this.sessions.get('count');
-        this.render("page.html", ctx);
-    },
-
-    'delete': function () {
-        console.log("delete...");
-        this.response.end();
+        console.log("on page with context, ok");
+        this.response.end(JSON.stringify(ctx));
     }
 });
 
 
-var server = new knot.Server({
+var server = new knotter.Server({
     handlers : [h1, h2],
     templates: 'templates',
     statics : ['bootstrap', 'images']
