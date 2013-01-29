@@ -129,7 +129,7 @@ Server.prototype.handle = function (req, res) {
                     req.on('end', function (){
                         handler.postdata = qs.parse(body);
                         if (handler.useSessions) {
-                            self.sessionHandler.httpRequest(req, res, function (err, session){
+                            this.sessionHandler.httpRequest(req, res, function (err, session){
                                 handler.sessions = session;
                                 handler[method]();
                             });
@@ -141,7 +141,7 @@ Server.prototype.handle = function (req, res) {
                 } else {
                     // GET cannot have some postdata, direct response
                     if (handler.useSessions) {
-                        self.sessionHandler.httpRequest(req, res, function (err, session){
+                        this.sessionHandler.httpRequest(req, res, function (err, session){
                             handler.sessions = session;
                             handler[method]();
                         });
