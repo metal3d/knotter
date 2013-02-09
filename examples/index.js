@@ -45,6 +45,7 @@ var h2 = new knotter.Handler({
 
 var server = new knotter.Server({
     handlers : [h1, h2],
-    statics : ['bootstrap', 'images']
+    statics : {"styles": "examples/css"}
 });
+
 server.serve();
