@@ -7,6 +7,7 @@
  */
 
 var http = require('http');
+var path = require('path');
 var mime = require('mime');
 var fs   = require('fs');
 var url  = require('url');
@@ -33,8 +34,15 @@ var Server = function (options) {
         }
     }
     if (options['statics'] != undefined) {
-        for (i in options.statics) {
-            this._serveStatic(options.statics[i]);
+        if (typeof(options["statics"]) == 'object' ){
+            for (i in options.statics) {
+                this._serveStatic(options.statics[i], i);
+            }
+
+        } else {
+            for (i in options.statics) {
+                this._serveStatic(options.statics[i]);
+            }
         }
     }
 };
@@ -43,13 +51,23 @@ var Server = function (options) {
  * Add handler to serve static files
  *
  * @params directory
+ * @params _route (optional)
  */
-Server.prototype._serveStatic = function (dir){
-    this.addHandler(new handler.Handler({
-        route: '/'+dir+'/.*',
+Server.prototype._serveStatic = function (dir, _route){
+    var route;
+    if ( _route != undefined ) {
+       route = _route;
+    } else {
+        dir = dir.replace(/^\/+/,'');
+        dir = dir.replace(/\/+$/,'');
+        route = dir;
+    }
+
+    var h = new handler.Handler({
+        route: '^/'+route+'/(.*)',
         get: function (){
-            var u = url.parse(this.request.url, false);
-            var filename = u.pathname.slice(1);
+            var filename =  path.join(path.resolve(this.directory),
+                this.params.args[1]);
 
             try {
                 fs.realpathSync(filename);   
@@ -74,13 +92,15 @@ Server.prototype._serveStatic = function (dir){
             catch(e){
                 console.log(e);
                 this.response.writeHead(404, "Not found");
-                this.response.end();
+                this.response.end("404 Not found");
                 return;
             }
 
 
         }
-    }));
+    });
+    h.directory = dir;
+    this.addHandler(h);
 };
 
 /**
