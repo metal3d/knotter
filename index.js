@@ -25,6 +25,7 @@
  *     s.start()
  *
  * @module knotter
+ * @main knotter
  * @author Patrice FERLET
  * @licence GPLv3
  */
