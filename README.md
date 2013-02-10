@@ -72,6 +72,10 @@ We will prepare a framework based on knotter that will implement some module as:
 
 ## Changelog
 
+0.0.4
+- documentation is better
+- static files can now be mapped on other routes (see example)
+
 0.0.3
 -  remove swig template engine, to let developper use its prefered engine.
 
