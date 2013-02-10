@@ -29,8 +29,8 @@
  * @licence GPLv3
  */
 
-var http = require('./libs/httpserver.js');
-var handler = require('./libs/handler.js');
+var http = require('./lib/httpserver.js');
+var handler = require('./lib/handler.js');
 
 module.exports = {
     Server: http.Server,
