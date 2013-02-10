@@ -2,7 +2,7 @@
     "name": "knotter",
     "version": "0.0.4",
     "description": "Knotter is a micro framework to create web application",
-    "main": "indes.js",
+    "main": "index",
     "keywords": [
         "framework",
         "middleware",
