@@ -1,6 +1,6 @@
 /**
- * Knot HttpServer
- *
+ * Knotter HttpServer
+ * 
  * @author Patrice FERLET
  * @licence GPLv3
  *
@@ -17,9 +17,17 @@ var handler = require('./handler');
 var qs = require('querystring');
 
 /**
- * Server is HTTP Server
+ * Server is HTTP Server. To be used, prepare some handlers then
+ * call constructor with options as:
  *
- * @params options (port, handlers, statics...)
+ * - handlers: Array of handlers
+ * - statics: Array or Object to map some directory as static container
+ * - port: to listen
+ * - address: ...
+ *
+ * @class Server
+ * @constructor
+ * @param {Object} options (port, handlers, statics...)
  * @todo manage https
  */
 var Server = function (options) {
@@ -48,10 +56,50 @@ var Server = function (options) {
 };
 
 /**
- * Add handler to serve static files
+ * Port to listen
  *
- * @params directory
- * @params _route (optional)
+ * @property {int} port
+ * @default 8000
+ */
+Server.prototype.port = 8000;
+
+
+/**
+ * Address to listen
+ *
+ * @property {String} address
+ * @default 127.0.0.1
+ */
+Server.prototype.address = "127.0.0.1";
+
+/**
+ * Session Handler, from "sessions" module
+ *
+ * @property {sessions.Session} sessionHandler
+ */
+Server.prototype.sessionHandler = null;
+
+
+/**
+ * Handlers container, keep list of knotter.Handler.
+ * To handler handlers, append them to constructor option and/or
+ * use addHandler method.
+ *
+ * @see Server.addHandler
+ * @property {Array} handlers
+ *
+ */
+Server.prototype.handlers = [];
+
+
+/**
+ * Add handler to serve static files. 
+ *
+ *
+ * @method _serveStatic
+ * @private
+ * @param {String} directory
+ * @param {String} _route (optional, if not given, _route will match directory)
  */
 Server.prototype._serveStatic = function (dir, _route){
     var route;
@@ -106,6 +154,8 @@ Server.prototype._serveStatic = function (dir, _route){
 /**
  * Add Handler in server registry
  *
+ * @method addHandler
+ * @param {knotter.Handler} handler
  */
 Server.prototype.addHandler = function (handler){
     handler.__reg = new RegExp(handler.route);
@@ -117,8 +167,9 @@ Server.prototype.addHandler = function (handler){
  * Called on each request to get handler mapped to
  * the called route
  *
- * @params request
- * @params result
+ * @method handle
+ * @param {http.Request} request
+ * @param {http.Response} response
  */
 Server.prototype.handle = function (req, res) {
     var query = url.parse(req.url);
@@ -178,6 +229,8 @@ Server.prototype.handle = function (req, res) {
 
 /**
  * Start to serve http
+ *
+ * @method serve
  */
 Server.prototype.serve = function () {
     var self = this;
