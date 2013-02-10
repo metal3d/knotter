@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Knotter by metal3d</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Knotter</h1>
+        <h2>knot module is a nodejs middleware to create websites</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/metal3d/knotter/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/metal3d/knotter/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/metal3d/knotter" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>knotter</h1>
+
+<p>knotter module is a nodejs middleware/microframework to create websites.</p>
+
+<h2>Why not using connect ? express ?</h2>
+
+<p>I really love ExpressJS and Connect. But what I wanted to do was to implement a pseudo WSGI-like system. 
+The main goal is to bundle some of my prefered modules in one place:</p>
+
+<ul>
+<li>sessions - simple session management</li>
+<li>swig for template engine (you must use consolidate module)</li>
+<li>use mimetype, underscore, etc...</li>
+</ul><h2>How to use ?</h2>
+
+<p>At this time, you need to do some operation manually:</p>
+
+<pre><code>cd /path/to/yor/working/directory
+npm install knotter
+</code></pre>
+
+<p>Then, you can implement your first appliction, create a "site.js" file:</p>
+
+<div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">knotter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'knotter'</span><span class="p">);</span>
+
+<span class="c1">//handler should serve get, post, put, delete requests</span>
+<span class="c1">//you only have to implement route (as regexp) with right name</span>
+<span class="kd">var</span> <span class="nx">Page1Handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Handler</span><span class="p">({</span>
+  <span class="nx">route</span><span class="o">:</span> <span class="s1">'/page1'</span><span class="p">,</span>
+  <span class="nx">useSessions</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">//if true, this.sessions can be used to get values</span>
+  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(){</span>
+    <span class="c1">// there you can get: this.sessions, this.response, this.request</span>
+    <span class="c1">// and this.params.args (ordered from captured regexp if any)</span>
+    <span class="c1">// and this.params.get (given by ?arg=value&amp;arg2=value2...)</span>
+    <span class="c1">// </span>
+    <span class="c1">// you can write response with this.end("Text to send to client");</span>
+    <span class="c1">// or render a template: this.render('path to template', context_object)</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">"Welcome on page 1 !"</span><span class="p">);</span>
+  <span class="p">},</span>
+
+  <span class="nx">post</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">// handler POST, you can access this.XXX like on GET method</span>
+   <span class="c1">// and this.postdata !</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">postdata</span><span class="p">);</span>
+   <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">"post data ok"</span><span class="p">);</span>
+
+  <span class="p">}</span>
+<span class="p">});</span>
+
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span>
+  <span class="nx">handlers</span> <span class="o">:</span> <span class="p">[</span><span class="nx">Page1Handler</span><span class="p">],</span> <span class="c1">//list of handlers,</span>
+  <span class="nx">statics</span> <span class="o">:</span> <span class="p">{</span><span class="s1">'styles'</span><span class="o">:</span> <span class="s1">'css'</span><span class="p">}</span> <span class="c1">// 127.0.0.1/styles/... will take </span>
+                              <span class="c1">// files in "css" directory</span>
+  <span class="cm">/*</span>
+<span class="cm">  statics : ['css', 'js'], // directory names to be served statically</span>
+<span class="cm">  you can pass "address" option to set listening address</span>
+<span class="cm">  address : "0.0.0.0"   //to listen on every interfaces</span>
+<span class="cm">  */</span>
+<span class="p">});</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">serve</span><span class="p">();</span> <span class="c1">//default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)</span>
+</pre></div>
+
+<h2>Note on Template Engine</h2>
+
+<p>in 0.0.2, knotter could implement swig template engine. But we removed this options to let user using its own prefered template engine. Knotter goals is not to be a "full framework" and should stay "lightwave"</p>
+
+<p>We will prepare a framework based on knotter that will implement some module as:</p>
+
+<ul>
+<li>blog</li>
+<li>cms</li>
+<li>comments</li>
+</ul><h2>Changelog</h2>
+
+<p>0.0.4</p>
+
+<ul>
+<li>documentation is better</li>
+<li>static files can now be mapped on other routes (see example)</li>
+</ul><p>0.0.3</p>
+
+<ul>
+<li> remove swig template engine, to let developper use its prefered engine.</li>
+</ul><h2>About File upload, forms...</h2>
+
+<p>At this time, I didn't found any "nice" way to setup a file uploader. "Nice" means:</p>
+
+<ul>
+<li>having a simple interface to save file to a "upload" directory</li>
+<li>having a method to give upload progress</li>
+<li>no soucy with rights, mimetype, form encoding...</li>
+</ul><p>I guess I will implement "formidable" module to manage forms... One more time, I'm open to discuss about.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
