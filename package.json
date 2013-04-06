@@ -11,7 +11,8 @@
     "dependencies" : {
         "sessions"  : ">= 0.0.2-7",
         "underscore": ">=1.1.7",
-        "mime"      : ">= 1.2.9"
+        "mime"      : ">= 1.2.9",
+        "consolidate": ">=0.9.0"
     },
     "directories" : {
         "lib"     : "./lib",
