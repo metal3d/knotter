@@ -32,8 +32,10 @@
 
 var http = require('./lib/httpserver.js');
 var handler = require('./lib/handler.js');
+var session = require('./lib/sessions.js');
 
 module.exports = {
     Server: http.Server,
-    Handler: handler.Handler
+    Handler: handler.Handler,
+    Session: session
 };
