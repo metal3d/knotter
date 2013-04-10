@@ -30,12 +30,14 @@
  * @licence GPLv3
  */
 
-var http = require('./lib/httpserver.js');
-var handler = require('./lib/handler.js');
-var session = require('./lib/sessions.js');
+var http = require('./lib/httpserver');
+var handler = require('./lib/handler');
+var session = require('./lib/sessions');
+var cluster = require('./lib/clusterutils');
 
 module.exports = {
     Server: http.Server,
     Handler: handler.Handler,
-    Session: session
+    Session: session,
+    Cluster: cluster
 };
