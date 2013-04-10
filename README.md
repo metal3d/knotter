@@ -35,15 +35,14 @@ var Page1Handler = {
     // you can write response with this.end("Text to send to client");
     // or render a template: this.render('path to template', context_object)
     
-    this.response.end("Welcome on page 1 !");
+    this.end("Welcome on page 1 !");
   },
   
   post: function() {
    // handler POST, you can access this.XXX like on GET method
    // and this.postdata !
    console.log(this.postdata);
-   this.response.end("post data ok");
-   
+   this.end("post data ok");
   }
 };
 
@@ -108,6 +107,7 @@ We will prepare a framework based on knotter that will implement some module as:
 - Remove "new knotter.Handler" notion, you should only set handlers as structure (this may change or be improved later)
 - new dependecy = uuid (to set cookie SESSID)
 - todo: set session TTL and SESSID name editable
+- Pleas use "this.write, this.end" and not "this.response.xxx" method now !
 
 0.0.4
 - documentation is better
