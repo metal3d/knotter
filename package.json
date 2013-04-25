@@ -1,6 +1,6 @@
 {
     "name": "knotter",
-    "version": "0.0.4",
+    "version": "0.1.1",
     "description": "Knotter is a micro framework to create web application",
     "main": "index",
     "keywords": [
