@@ -21,13 +21,20 @@ At this time, you need to do some operation manually:
 Then, you can implement your first appliction, create a "site.js" file:
 ```javascript    
 
+/**
+* Create your class that inherits from knotter.Handler
+*/
+function Page1Handler = (){
+    knotter.Handler.call(this);
+}
+util.inherits(Page1Handler, knotter.Handler);
 
-//handler should serve get, post, put, delete requests
-//you only have to implement route (as regexp) with right name
-var Page1Handler = {
-  route: '/page1',
-  useSessions: false, //if true, this.sessions can be used to get values
-  get: function (){
+// define the route to respond (regexp)
+// It is important that "route" is declared in prototype
+Page1Handler.prototype.route = '/page1';
+
+// Respond to "GET" requests
+Page1Handler.prorotype.get = function (){
     // there you can get: this.sessions, this.response, this.request
     // and this.params.args (ordered from captured regexp if any)
     // and this.params.get (given by ?arg=value&arg2=value2...)
@@ -36,19 +43,11 @@ var Page1Handler = {
     // or render a template: this.render('path to template', context_object)
     
     this.end("Welcome on page 1 !");
-  },
-  
-  post: function() {
-   // handler POST, you can access this.XXX like on GET method
-   // and this.postdata !
-   console.log(this.postdata);
-   this.end("post data ok");
-  }
 };
 
 
 var server = knotter.Server({
-  handlers : [Page1Handler], //list of handlers structures,
+  handlers : [Page1Handler], //list of handlers classes,
   statics : ['css', 'js'], // directory names to be served statically
   // you can pass "address" option to set listening address
   // address : "0.0.0.0" to listen on every interfaces
@@ -69,8 +68,14 @@ Now template engines are managed by the "consolidate" module. We only tested "sw
 var server = knotter.Server({
     //...
     engine: 'swig',
-    templates: __dirname+"/templates"
-    //...
+    templates: __dirname+"/templates",
+    engineOptions: {
+        root: __dirname+'/templates',
+        allowErrors: true,
+        autoescape: false,
+        tzOffset: new Date().getTimezoneOffset(),
+        cache: false
+    }
 });
 
 ```
@@ -79,15 +84,11 @@ Afterward, in handler, you can use:
 
 ```javascript
 
-{ 
-    get: function (){
-        //...
-        // test.html should be in __dirname/templates directory
-        // ctx is an object that handle some vars you can
-        // use in template
-        this.render('test.html', ctx);
-    }
-}
+//...
+// test.html should be in __dirname/templates directory
+// ctx is an object that handle some vars you can
+// use in template
+this.render('test.html', ctx);
 
 ```
 
@@ -99,6 +100,10 @@ We will prepare a framework based on knotter that will implement some module as:
 
 
 ## Changelog
+
+0.1.1
+- Sessions are now fixed
+- hanlders are classes, see example
 
 0.1.0
 - Add session management and remove "sessions" external module
