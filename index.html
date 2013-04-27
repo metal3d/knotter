@@ -1,33 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>Knotter by metal3d</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
-
-    <header>
-      <div class="container">
+    <div class="wrapper">
+      <header>
         <h1>Knotter</h1>
-        <h2>knot module is a nodejs middleware to create websites</h2>
+        <p>knot module is a nodejs middleware to create websites</p>
 
-        <section id="downloads">
-          <a href="https://github.com/metal3d/knotter/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/metal3d/knotter/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/metal3d/knotter" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+        <p class="view"><a href="https://github.com/metal3d/knotter">View the Project on GitHub <small>metal3d/knotter</small></a></p>
 
-    <div class="container">
-      <section id="main_content">
+
+        <ul>
+          <li><a href="https://github.com/metal3d/knotter/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/metal3d/knotter/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/metal3d/knotter">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h1>knotter</h1>
 
 <p>knotter module is a nodejs middleware/microframework to create websites.</p>
@@ -39,7 +39,7 @@ The main goal is to bundle some of my prefered modules in one place:</p>
 
 <ul>
 <li>sessions - simple session management</li>
-<li>swig for template engine (you must use consolidate module)</li>
+<li>swig for template engine</li>
 <li>use mimetype, underscore, etc...</li>
 </ul><h2>How to use ?</h2>
 
@@ -52,14 +52,20 @@ npm install knotter
 <p>Then, you can implement your first appliction, create a "site.js" file:</p>
 
 <div class="highlight"><pre>
-<span class="kd">var</span> <span class="nx">knotter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'knotter'</span><span class="p">);</span>
+<span class="cm">/**</span>
+<span class="cm">* Create your class that inherits from knotter.Handler</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">Page1Handler</span> <span class="o">=</span> <span class="p">(){</span>
+    <span class="nx">knotter</span><span class="p">.</span><span class="nx">Handler</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Page1Handler</span><span class="p">,</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Handler</span><span class="p">);</span>
 
-<span class="c1">//handler should serve get, post, put, delete requests</span>
-<span class="c1">//you only have to implement route (as regexp) with right name</span>
-<span class="kd">var</span> <span class="nx">Page1Handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Handler</span><span class="p">({</span>
-  <span class="nx">route</span><span class="o">:</span> <span class="s1">'/page1'</span><span class="p">,</span>
-  <span class="nx">useSessions</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">//if true, this.sessions can be used to get values</span>
-  <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(){</span>
+<span class="c1">// define the route to respond (regexp)</span>
+<span class="c1">// It is important that "route" is declared in prototype</span>
+<span class="nx">Page1Handler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">route</span> <span class="o">=</span> <span class="s1">'/page1'</span><span class="p">;</span>
+
+<span class="c1">// Respond to "GET" requests</span>
+<span class="nx">Page1Handler</span><span class="p">.</span><span class="nx">prorotype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(){</span>
     <span class="c1">// there you can get: this.sessions, this.response, this.request</span>
     <span class="c1">// and this.params.args (ordered from captured regexp if any)</span>
     <span class="c1">// and this.params.get (given by ?arg=value&amp;arg2=value2...)</span>
@@ -67,28 +73,18 @@ npm install knotter
     <span class="c1">// you can write response with this.end("Text to send to client");</span>
     <span class="c1">// or render a template: this.render('path to template', context_object)</span>
 
-    <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">"Welcome on page 1 !"</span><span class="p">);</span>
-  <span class="p">},</span>
-
-  <span class="nx">post</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-   <span class="c1">// handler POST, you can access this.XXX like on GET method</span>
-   <span class="c1">// and this.postdata !</span>
-   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">postdata</span><span class="p">);</span>
-   <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">"post data ok"</span><span class="p">);</span>
-
-  <span class="p">}</span>
-<span class="p">});</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">"Welcome on page 1 !"</span><span class="p">);</span>
+<span class="p">};</span>
 
 
 <span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span>
-  <span class="nx">handlers</span> <span class="o">:</span> <span class="p">[</span><span class="nx">Page1Handler</span><span class="p">],</span> <span class="c1">//list of handlers,</span>
-  <span class="nx">statics</span> <span class="o">:</span> <span class="p">{</span><span class="s1">'styles'</span><span class="o">:</span> <span class="s1">'css'</span><span class="p">}</span> <span class="c1">// 127.0.0.1/styles/... will take </span>
-                              <span class="c1">// files in "css" directory</span>
-  <span class="cm">/*</span>
-<span class="cm">  statics : ['css', 'js'], // directory names to be served statically</span>
-<span class="cm">  you can pass "address" option to set listening address</span>
-<span class="cm">  address : "0.0.0.0"   //to listen on every interfaces</span>
-<span class="cm">  */</span>
+  <span class="nx">handlers</span> <span class="o">:</span> <span class="p">[</span><span class="nx">Page1Handler</span><span class="p">],</span> <span class="c1">//list of handlers classes,</span>
+  <span class="nx">statics</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">statics</span> <span class="o">:</span> <span class="s1">'staticdir'</span><span class="p">,</span>
+    <span class="nx">images</span>  <span class="o">:</span> <span class="s1">'imgdir'</span>
+  <span class="p">},</span> <span class="c1">// directories to be served statically, eg. /images/test.png serves imgdir/test.png</span>
+  <span class="c1">// you can pass "address" option to set listening address</span>
+  <span class="c1">// address : "0.0.0.0" to listen on every interfaces</span>
 <span class="p">});</span>
 
 <span class="nx">server</span><span class="p">.</span><span class="nx">serve</span><span class="p">();</span> <span class="c1">//default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)</span>
@@ -96,9 +92,38 @@ npm install knotter
 
 <h2>Note on Template Engine</h2>
 
-<p>In 0.0.2, knotter could implement swig template engine. But we removed this option to let user using its own prefered template engine. Knotter goal is not to be a "full framework" and should stay "lightweight"</p>
+<p>in 0.0.2, knotter could implement swig template engine. But we removed this options to let user using its own prefered template engine. Knotter goals is not to be a "full framework" and should stay "lightwave"</p>
 
-<p>We will prepare a framework based on knotter that will implement some modules as:</p>
+<p>Now template engines are managed by the "consolidate" module. We only tested "swig" as engine and it works as expected. To use swig:</p>
+
+<div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">knotter</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span>
+    <span class="c1">//...</span>
+    <span class="nx">engine</span><span class="o">:</span> <span class="s1">'swig'</span><span class="p">,</span>
+    <span class="nx">templates</span><span class="o">:</span> <span class="nx">__dirname</span><span class="o">+</span><span class="s2">"/templates"</span><span class="p">,</span>
+    <span class="nx">engineOptions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">root</span><span class="o">:</span> <span class="nx">__dirname</span><span class="o">+</span><span class="s1">'/templates'</span><span class="p">,</span>
+        <span class="nx">allowErrors</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">autoescape</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">tzOffset</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTimezoneOffset</span><span class="p">(),</span>
+        <span class="nx">cache</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+</pre></div>
+
+<p>Afterward, in handler, you can use:</p>
+
+<div class="highlight"><pre>
+<span class="c1">//...</span>
+<span class="c1">// test.html should be in __dirname/templates directory</span>
+<span class="c1">// ctx is an object that handle some vars you can</span>
+<span class="c1">// use in template</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'test.html'</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">);</span>
+
+</pre></div>
+
+<p>We will prepare a framework based on knotter that will implement some module as:</p>
 
 <ul>
 <li>blog</li>
@@ -106,7 +131,22 @@ npm install knotter
 <li>comments</li>
 </ul><h2>Changelog</h2>
 
-<p>0.0.4</p>
+<p>0.1.1</p>
+
+<ul>
+<li>Sessions are now fixed</li>
+<li>handlers are classes, see example</li>
+</ul><p>0.1.0</p>
+
+<ul>
+<li>Add session management and remove "sessions" external module</li>
+<li>Sessions are shared in cluster implementation, you should use knotter.Cluster.addWorker(...)</li>
+<li>Use consolidate module to implement several template engines</li>
+<li>Remove "new knotter.Handler" notion, you should only set handlers as structure (this may change or be improved later)</li>
+<li>new dependecy = uuid (to set cookie SESSID)</li>
+<li>todo: set session TTL and SESSID name editable</li>
+<li>Pleas use "this.write, this.end" and not "this.response.xxx" method now !</li>
+</ul><p>0.0.4</p>
 
 <ul>
 <li>documentation is better</li>
@@ -120,13 +160,17 @@ npm install knotter
 <p>At this time, I didn't found any "nice" way to setup a file uploader. "Nice" means:</p>
 
 <ul>
-<li>having a simple interface to save file to an "upload" directory</li>
-<li>having a method to give the upload progression state</li>
+<li>having a simple interface to save file to a "upload" directory</li>
+<li>having a method to give upload progress</li>
 <li>no soucy with rights, mimetype, form encoding...</li>
-</ul><p>I guess I will implement "formidable" module to manage forms... One more time, I'm open to discuss.</p>
+</ul><p>I guess I will implement "formidable" module to manage forms... One more time, I'm open to discuss about.</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/metal3d">metal3d</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
