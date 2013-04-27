@@ -48,7 +48,10 @@ Page1Handler.prorotype.get = function (){
 
 var server = knotter.Server({
   handlers : [Page1Handler], //list of handlers classes,
-  statics : ['css', 'js'], // directory names to be served statically
+  statics : {
+    statics : 'staticdir',
+    images  : 'imgdir'
+  }, // directories to be served statically, eg. /images/test.png serves imgdir/test.png
   // you can pass "address" option to set listening address
   // address : "0.0.0.0" to listen on every interfaces
 });
@@ -103,7 +106,7 @@ We will prepare a framework based on knotter that will implement some module as:
 
 0.1.1
 - Sessions are now fixed
-- hanlders are classes, see example
+- handlers are classes, see example
 
 0.1.0
 - Add session management and remove "sessions" external module
