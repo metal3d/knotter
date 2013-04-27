@@ -1,0 +1,341 @@
+{
+    "project": {},
+    "files": {
+        "lib/handler.js": {
+            "name": "lib/handler.js",
+            "modules": {},
+            "classes": {
+                "Handler": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/httpserver.js": {
+            "name": "lib/httpserver.js",
+            "modules": {},
+            "classes": {
+                "Server": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "index.js": {
+            "name": "index.js",
+            "modules": {
+                "knotter": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "knotter": {
+            "name": "knotter",
+            "submodules": {},
+            "classes": {
+                "Handler": 1,
+                "Server": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "lib/httpserver.js",
+            "line": 19,
+            "description": "Knotter module. This is a simple module that use a pseudo WSGI\narchitechture. You only have to set some knotter.Handler given route and methods\n(get: function (){...}) then append them to knotter.Server.\n\nAfter calling \"start\" method, each of your handlers will respond to url that match\nroute.\n\nExample:\n\n    var knotter = require('knotter');\n\n    var h = new knotter.Handler({\n         route: '/my/page',\n\n         get: function (){\n             this.response.end(\"This is my page\");\n         }\n    });\n\n    var s = new knotter.Server({\n         handlers: [h], //list of handlers\n    });\n\n    s.start()",
+            "itemtype": "main"
+        }
+    },
+    "classes": {
+        "Handler": {
+            "name": "Handler",
+            "shortname": "Handler",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "knotter",
+            "file": "lib/handler.js",
+            "line": 11,
+            "description": "Handler that will match route to method.\nThis is the class to implement on project.\nMinimum required is \"route\" and one of HTTP method\nas get, post, put, delete...\n\nHandler has this properties to work:\n\n - params.args => that matches regexp on url\n - params.get => options given by ?argname=argvalue&...\n - postdata => object having post data\n - response => to write response\n - request => the current request",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "({route:... , get: funtion(){}... }",
+                    "type": "Object"
+                }
+            ]
+        },
+        "Server": {
+            "name": "Server",
+            "shortname": "Server",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "knotter",
+            "file": "lib/httpserver.js",
+            "line": 19,
+            "description": "Server is HTTP Server. To be used, prepare some handlers then\ncall constructor with options as:\n\n- handlers: Array of handlers\n- statics: Array or Object to map some directory as static container\n- port: to listen\n- address: ...",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "(port, handlers, statics...)",
+                    "type": "Object"
+                }
+            ],
+            "todo": [
+                "manage https"
+            ],
+            "example": [
+                "\n\n     var s = new knotter.Server({\n         handlers: [hdl1, hdl2],\n         statics: {'styles': 'css/directory/'},\n         address : '0.0.0.0',\n         port    : 8080\n     });"
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "lib/handler.js",
+            "line": 43,
+            "description": "Property that handle arguments (GET and url parts)",
+            "itemtype": "property",
+            "name": "params",
+            "type": "Object",
+            "default": "{args: [], get: {}}",
+            "example": [
+                "\n\n     var h = new knotter.Handler({\n         route: '/article/(.*?)/(\\\\d+)',\n         get: function (){\n\n             // get params captured by (.*?)\n             var param1 = this.params.args[1];\n\n             //get params captured by (\\d+)\n             var param2 = this.params.args[2];\n\n\n             //if there is ?foo=bar:\n             var gets = this.params['get']\n             console.log(gets['foo']); //writes \"bar\" on console\n             this.response.end(\"ok\")\n         };\n     })"
+            ],
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 71,
+            "description": "Postdata object that map datas sent via POST method",
+            "itemtype": "property",
+            "name": "postdata",
+            "type": "Object",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 78,
+            "description": "Route to handle (regexp)",
+            "itemtype": "property",
+            "name": "route",
+            "type": "String",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 85,
+            "description": "GET method handler, to be set if handler should respond\nto GET",
+            "itemtype": "method",
+            "name": "get",
+            "default": "null",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 94,
+            "description": "POST method handler, to be set if handler should respond\nto POST",
+            "itemtype": "method",
+            "name": "post",
+            "default": "null",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 103,
+            "description": "PUT method handler, to be set if handler should repond\nto PUT",
+            "itemtype": "method",
+            "name": "put",
+            "default": "null",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 112,
+            "description": "DELETE method handler, to be set if handler should repond\nto DELETE",
+            "itemtype": "method",
+            "name": "delete",
+            "default": "null",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 121,
+            "description": "Boolean to enable session on handler.",
+            "itemtype": "property",
+            "name": "useSessions",
+            "type": "Bool",
+            "default": "false",
+            "example": [
+                "\n\n     var h = new knotter.Handler({\n         useSessions: true,\n         route: '/user',\n\n         get: function () {\n             try {\n                 //fetch \"user\" from session\n                 var user = this.sessions.get('username')\n                 if (user) {\n                     this.response.write(\"Hi \"+ user + \"<br />\");\n                 }\n             } \n             catch (e) {\n                 //useSessions was set to false ?\n                 console.log(e);\n             }\n             //anyway, show a form to set username\n             this.response.write('<form action=\"\">'\n                     + 'Type username: <input type=\"text\" name=\"user\" />'\n                     + '<input type=\"submit\" value=\"send\" /></form>');\n             this.response.end();\n\n         },\n         \n         post: function () {\n             //if get username from form\n             if (this.postdata['user']) {\n                 this.sessions.set('username', this.postdata['user']);\n             }\n\n             //redirect to /user\n             this.response.writeHead(302, {\n                 'Location': '/user'\n             });\n             this.response.end();\n         }\n     })"
+            ],
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 170,
+            "description": "Handler sessions.session to get/set values",
+            "itemtype": "property",
+            "name": "sessions",
+            "type": "Function",
+            "throws": [
+                "Exception if useSessions is set to false"
+            ],
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 180,
+            "description": "Response handler, object taken from http.Response",
+            "itemtype": "property",
+            "name": "response",
+            "type": "http.Response",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/handler.js",
+            "line": 187,
+            "description": "Request handler, object taken from http.Request",
+            "itemtype": "property",
+            "name": "request",
+            "type": "http.Request",
+            "class": "Handler"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 66,
+            "description": "Port to listen",
+            "itemtype": "property",
+            "name": "port",
+            "type": "Int",
+            "default": "8000",
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 75,
+            "description": "Address to listen",
+            "itemtype": "property",
+            "name": "address",
+            "type": "String",
+            "default": "127.0.0.1",
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 83,
+            "description": "Session Handler, from \"sessions\" module",
+            "itemtype": "property",
+            "name": "sessionHandler",
+            "type": "sessions.Session",
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 91,
+            "description": "Handlers container, keep list of knotter.Handler.\nTo handler handlers, append them to constructor option and/or\nuse addHandler method.",
+            "see": [
+                "Server.addHandler"
+            ],
+            "itemtype": "property",
+            "name": "handlers",
+            "type": "Array",
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 103,
+            "description": "Add handler to serve static files.",
+            "itemtype": "method",
+            "name": "_serveStatic",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "directory",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "_route",
+                    "description": "(optional, if not given, _route will match directory)",
+                    "type": "String"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 162,
+            "description": "Add Handler in server registry",
+            "itemtype": "method",
+            "name": "addHandler",
+            "params": [
+                {
+                    "name": "handler",
+                    "description": "",
+                    "type": "knotter.Handler"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 174,
+            "description": "Called on each request to get handler mapped to\nthe called route",
+            "itemtype": "method",
+            "name": "handle",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "request",
+                    "description": "",
+                    "type": "http.Request"
+                },
+                {
+                    "name": "response",
+                    "description": "",
+                    "type": "http.Response"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 239,
+            "description": "Start to serve http",
+            "itemtype": "method",
+            "name": "serve",
+            "uses": [
+                "http.Server"
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/httpserver.js",
+            "line": 255,
+            "description": "Alias to `serve` method",
+            "itemtype": "method",
+            "name": "start",
+            "alias": "serve",
+            "class": "Server"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: alias",
+            "line": " lib/httpserver.js:255"
+        },
+        {
+            "message": "unknown tag: licence",
+            "line": " index.js:1"
+        }
+    ]
+}
