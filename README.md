@@ -187,6 +187,7 @@ We will prepare a framework based on knotter that will implement some module as:
 1.0.0
 - New helpers: createHandler and createServer
 - Fixed GET parameters that were not parsed
+- Cookies for Sessions are now written only if client has got values to set
 
 0.1.1
 - Sessions are now fixed
