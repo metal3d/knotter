@@ -5,30 +5,52 @@
 
 // outside example, use require('knotter')
 var knotter = require('../index');
-var util    = require('util')
+var util    = require('util');
 
 /**
  * A test handler
  */
-function TestHandler(){
+function TestHandler() {
     knotter.Handler.call(this);
 }
-
-
 util.inherits(TestHandler, knotter.Handler);
 
-
 TestHandler.prototype.route = "^/page/test";
-
-TestHandler.prototype.get = function (){
+TestHandler.prototype.get = function () {
     this.write("hello on page 1");
     this.end();
 };
 
 
+// use "formidable" integration
+function FormHandler() {
+    knotter.Handler.call(this);
+}
+util.inherits(FormHandler, knotter.Handler);
 
+FormHandler.prototype.route = "^/page/form";
+FormHandler.prototype.get = function () {
+    this.writeHead(200, {'Content-Type' : 'text/html'});
+    this.write(util.inspect(this.postdata));
+    this.end(
+      '<form method="post" action="/page/form" enctype="multipart/form-data">' +
+      '<input type="text" name="testfield1" /> ' +
+      '<input type="file" name="filefield1" /> ' +
+      '<input type="submit" value="Send" />'     +
+      '</form>'
+    );
+};
+
+FormHandler.prototype.post = function () {
+    this.end(
+        util.inspect(this.postdata) + util.inspect(this.params.post)
+    );
+};
+
+
+// the server
 var server = new knotter.Server({
-    handlers : [TestHandler],
+    handlers : [TestHandler, FormHandler],
     statics : {"styles": "example/css"}
 });
 
