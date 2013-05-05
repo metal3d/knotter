@@ -30,7 +30,6 @@ util.inherits(FormHandler, knotter.Handler);
 
 FormHandler.prototype.route = "^/page/form";
 FormHandler.prototype.get = function () {
-    this.writeHead(200, {'Content-Type' : 'text/html'});
     this.write(util.inspect(this.postdata));
     this.end(
       '<form method="post" action="/page/form" enctype="multipart/form-data">' +
@@ -42,6 +41,7 @@ FormHandler.prototype.get = function () {
 };
 
 FormHandler.prototype.post = function () {
+    this.setHeader('Content-Type', 'text/plain');
     this.end(
         util.inspect(this.postdata) + util.inspect(this.params.post)
     );
