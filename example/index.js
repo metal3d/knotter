@@ -28,6 +28,7 @@ var FormHandler = knotter.createHandler();
 FormHandler.prototype.route = "^/page/form";
 FormHandler.prototype.get = function () {
     this.write(util.inspect(this.postdata));
+    this.write(util.inspect(this.params));
     this.end(
       '<form method="post" action="/page/form" enctype="multipart/form-data">' +
       '<input type="text" name="testfield1" /> ' +
