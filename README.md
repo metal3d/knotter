@@ -107,7 +107,7 @@ this.params.args[1] // => 99
 Knotter requires "formidable" since 1.0.0, you can use it to get POST vars and Files:
 
 ```javascript
-// is your form send file in input named "myfile1", and another input type "text"
+// if your form send file in input named "myfile1", and another input type "text"
 // named "myentry"
 
 this.params.post.fields.myentry // => entry value
