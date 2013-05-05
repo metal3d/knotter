@@ -21,13 +21,13 @@ At this time, you need to do some operation manually:
 Then, you can implement your first appliction, create a "site.js" file:
 ```javascript    
 
+var knotter = require('knotter');
+
 /**
 * Create your class that inherits from knotter.Handler
+* createHandler helper does the work
 */
-function Page1Handler = (){
-    knotter.Handler.call(this);
-}
-util.inherits(Page1Handler, knotter.Handler);
+var Page1Handler = knotter.createHandler();
 
 // define the route to respond (regexp)
 // It is important that "route" is declared in prototype
@@ -46,7 +46,7 @@ Page1Handler.prorotype.get = function (){
 };
 
 
-var server = knotter.Server({
+var server = knotter.createServer({
   handlers : [Page1Handler], //list of handlers classes,
   statics : {
     statics : 'staticdir',
@@ -59,6 +59,86 @@ var server = knotter.Server({
 server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)
 ```
 
+Since 1.0.0 you can implement the whole prototype in createHandler() options:
+
+```javascript
+
+/**
+* Create your class that inherits from knotter.Handler
+* createHandler helper does the work
+*/
+var Page1Handler = knotter.createHandler({
+    route : '/page1',
+    get : function (){
+        this.end("Welcome on page 1 !");
+    }
+});
+
+```
+
+
+## Methods in handlers
+
+### GET parameters
+
+You can access GET parameters with `this.params.get`
+
+```javascript
+
+// hit url /page/example?foo=bar&baz=1
+this.params.get.foo // => "bar"
+this.params.get.baz // => "1"
+
+```
+
+### url parameters
+
+You can create parts of url to set parameters and get them in `this.params.args`:
+
+```javascript
+// handler route is: "^/user/\\d+/edit", hitting "/user/99/edit":
+
+this.params.args[1] // => 99
+
+```
+
+### POST and Files
+
+Knotter requires "formidable" since 1.0.0, you can use it to get POST vars and Files:
+
+```javascript
+// is your form send file in input named "myfile1", and another input type "text"
+// named "myentry"
+
+this.params.post.fields.myentry // => entry value
+this.params.post.files.myfile1 // => that is an object containing:
+{ 
+    domain: null,
+    _events: {},
+    _maxListeners: 10,
+    size: 655118,
+    path: '/tmp/cfabc74d742ff63c890f7dfa8e348d93', // => file sent
+    name: 'chess.png', // => real file name
+    type: 'image/png', // => file type
+    hash: null,
+    lastModifiedDate: Sun May 05 2013 14:37:12 GMT+0200 (CEST),
+    _writeStream: [Object]
+}  
+
+```
+
+### other methods you can use
+
+- this.setHeader(name, value): force an header to be set: this.setHeader('Content-Type', 'text/plain');
+- this.writeHead(code [, reason], header): Append header, with code:
+    this.writeHead(200, 'OK')
+    or
+    this.writeHead(200, {'Content-lenght': 1024, 'Foo':'Bar'})
+- this.write([string]): write string, doen't close response, so you can continue to use write
+- this.end([string]): write "string" if given, and close response => you must call this method to end you handler and let the client get response
+- this.session.get(key): return session value or null
+- this.session.set(key, value): write session key with given value (you must use this methode *before* sending something to client)
+- and many more...
 
 ## Note on Template Engine
 
@@ -103,6 +183,10 @@ We will prepare a framework based on knotter that will implement some module as:
 
 
 ## Changelog
+
+1.0.0
+- New helpers: createHandler and createServer
+- Fixed GET parameters that were not parsed
 
 0.1.1
 - Sessions are now fixed
