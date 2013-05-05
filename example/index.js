@@ -8,26 +8,23 @@ var knotter = require('../index');
 var util    = require('util');
 
 /**
- * A test handler
+ * A test handler, example to use "prototype" argument to 
+ * createHandler()
  */
-function TestHandler() {
-    knotter.Handler.call(this);
-}
-util.inherits(TestHandler, knotter.Handler);
-
-TestHandler.prototype.route = "^/page/test";
-TestHandler.prototype.get = function () {
-    this.write("hello on page 1");
-    this.end();
-};
+var TestHandler = knotter.createHandler({
+    route : "^/page/test",
+    get : function () {
+        this.write("hello on page 1");
+        this.end();
+    }
+});
+console.log(util.inspect(TestHandler));
 
 
 // use "formidable" integration
-function FormHandler() {
-    knotter.Handler.call(this);
-}
-util.inherits(FormHandler, knotter.Handler);
-
+// example with "prototype" set after getting
+// class from createHandler()
+var FormHandler = knotter.createHandler();
 FormHandler.prototype.route = "^/page/form";
 FormHandler.prototype.get = function () {
     this.write(util.inspect(this.postdata));
@@ -49,7 +46,7 @@ FormHandler.prototype.post = function () {
 
 
 // the server
-var server = new knotter.Server({
+var server = knotter.createServer({
     handlers : [TestHandler, FormHandler],
     statics : {"styles": "example/css"}
 });

@@ -34,10 +34,53 @@ var http = require('./lib/httpserver');
 var handler = require('./lib/handler');
 var session = require('./lib/sessions');
 var cluster = require('./lib/clusterutils');
+var util    = require('util');
+
+// Basic helpers
+
+/**
+ * Create an Handler that is ready to be prototyped. Keep in mind that you
+ * *must* work with "prototype"
+ *
+ * @param {object} optionnal prototype
+ * @return {Class} handler
+ */
+function createHandler(proto) {
+
+    // a constructor
+    function newHandler() {
+        handler.Handler.call(this);
+    }
+
+    // inherits from knotter.Handler
+    util.inherits(newHandler, handler.Handler);
+
+    // append prototype if given    
+    if (proto) {
+        for (var i in proto) {
+            newHandler.prototype[i] = proto[i];
+        }
+    }
+
+    return newHandler;
+}
+
+/**
+ * Returns a ready server
+ *
+ * @params {Object} params
+ * @return {Server} server
+ */
+function createServer(opts) {
+    return new http.Server(opts);
+}
+
 
 module.exports = {
     Server: http.Server,
     Handler: handler.Handler,
     Session: session,
-    Cluster: cluster
+    Cluster: cluster,
+    createHandler: createHandler,
+    createServer: createServer
 };
