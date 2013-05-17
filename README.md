@@ -27,39 +27,46 @@ var knotter = require('knotter');
 * Create your class that inherits from knotter.Handler
 * createHandler helper does the work
 */
-var Page1Handler = knotter.createHandler();
-
-// define the route to respond (regexp)
-// It is important that "route" is declared in prototype
-Page1Handler.prototype.route = '/page1';
-
-// Respond to "GET" requests
-Page1Handler.prorotype.get = function (){
-    // there you can get: this.sessions, this.response, this.request
-    // and this.params.args (ordered from captured regexp if any)
-    // and this.params.get (given by ?arg=value&arg2=value2...)
-    // 
-    // you can write response with this.end("Text to send to client");
-    // or render a template: this.render('path to template', context_object)
+var Page1Handler = knotter.createHandler({
+    // define the route to respond (regexp)
+    // It is important that "route" is declared in prototype
+    route : '^/page1',
     
-    this.end("Welcome on page 1 !");
-};
+    // Respond to "GET" requests
+    get : function (){
+        // there you can get: this.sessions, this.response, this.request
+        // and this.params.args (ordered from captured regexp if any)
+        // and this.params.get (given by ?arg=value&arg2=value2...)
+        // 
+        // you can write response with this.end("Text to send to client");
+        // or render a template: this.render('path to template', context_object)
+        
+        this.end("Welcome on page 1 !");
+    }
+ });
 
-
+// Create the server
 var server = knotter.createServer({
-  handlers : [Page1Handler], //list of handlers classes,
+  //list of handlers classes,
+  handlers : [Page1Handler], 
+  
+  // optionnal
+  // directories to be served statically, eg. /images/test.png serves imgdir/test.png
   statics : {
     statics : 'staticdir',
     images  : 'imgdir'
-  }, // directories to be served statically, eg. /images/test.png serves imgdir/test.png
+  }, 
   // you can pass "address" option to set listening address
   // address : "0.0.0.0" to listen on every interfaces
 });
 
-server.serve(); //default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)
+//start the server
+//default listen on 127.0.0.1:8000 (open 127.0.0.1:8000/page1 to check result)
+server.serve(); 
 ```
 
-Since 1.0.0 you can implement the whole prototype in createHandler() options:
+Since 1.0.0 you can implement the whole prototype in createHandler() options, but keep in mind that knotter.createHandler returns a class.
+So you can implement everything in the prototype.
 
 ```javascript
 
@@ -67,12 +74,9 @@ Since 1.0.0 you can implement the whole prototype in createHandler() options:
 * Create your class that inherits from knotter.Handler
 * createHandler helper does the work
 */
-var Page1Handler = knotter.createHandler({
-    route : '/page1',
-    get : function (){
-        this.end("Welcome on page 1 !");
-    }
-});
+var Page1Handler = knotter.createHandler();
+Page1Handler.prototype.route = "^/page1";
+Page1Handler.prototype.get = function (){...};
 
 ```
 
@@ -96,7 +100,7 @@ this.params.get.baz // => "1"
 You can create parts of url to set parameters and get them in `this.params.args`:
 
 ```javascript
-// handler route is: "^/user/\\d+/edit", hitting "/user/99/edit":
+// handler route is: "^/user/(\\d+)/edit", hitting "/user/99/edit":
 
 this.params.args[1] // => 99
 
@@ -148,7 +152,7 @@ Now template engines are managed by the "consolidate" module. We only tested "sw
 
 ```javascript
 
-var server = knotter.Server({
+var server = knotter.createServer({
     //...
     engine: 'swig',
     templates: __dirname+"/templates",
